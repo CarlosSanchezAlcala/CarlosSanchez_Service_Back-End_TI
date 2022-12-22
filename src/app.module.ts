@@ -27,7 +27,7 @@ import { AuthService } from "./services/auth.service";
       type: 'oracle',
       host: 'localhost',
       port: 1521,
-      username: 'CARLOS',
+      username: 'SISTEMA',
       password: '@abc123@',
       sid: 'xe',
       entities: [__dirname + '/**/**.entity{.ts,.js}'],

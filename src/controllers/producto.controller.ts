@@ -34,8 +34,13 @@ export class ProductoController {
         return this.productoService.findById(idProducto);
     }
 
-    @Delete(':idProducto')
+    @Delete('/delete/:idProducto')
     async deleteById(@Param('idProducto') idProducto: number) {
-        return this.productoService.delete(idProducto);
+        return this.productoService.deleteLogico(idProducto);
+    }
+
+    @Get("/nombres/:nombreProducto")
+    findByName(@Param('nombreProducto') nombreProducto: string) {
+        return this.productoService.findByName(nombreProducto);
     }
 }

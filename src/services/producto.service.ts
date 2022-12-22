@@ -1,6 +1,6 @@
-import { InjectRepository } from '@nestjs/typeorm';
+import { InjectDataSource, InjectRepository } from "@nestjs/typeorm";
 import { ProductoEntity } from '../entities/producto.entity';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from "typeorm";
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
@@ -8,6 +8,7 @@ export class ProductoService {
     constructor(
         @InjectRepository(ProductoEntity)
         private productoRepository: Repository<ProductoEntity>,
+        @InjectDataSource() private datasource: DataSource
     ) {}
 
     register(producto: ProductoEntity) {
@@ -19,14 +20,30 @@ export class ProductoService {
     }
 
     findAll() {
-        return this.productoRepository.find();
+        return this.productoRepository.find({
+            where: {
+                estadoProducto: 'A'
+            }
+        });
     }
 
     delete(idProducto: number) {
         return this.productoRepository.delete(idProducto);
     }
 
+    deleteLogico(idProducto: number) {
+        this.findById(idProducto).then(res => {
+            const producto = res[0];
+            producto.estadoProducto = 'I';
+            this.productoRepository.save(producto)
+        })
+    }
+
     findById(idProducto: number) {
         return this.productoRepository.findBy({ idProducto });
+    }
+
+    findByName(nombreProducto: string) {
+        return this.productoRepository.findBy({nombreProducto});
     }
 }
